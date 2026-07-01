@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import inspect
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable
 from typing import Protocol, runtime_checkable
 
 from events.base import DomainEvent
@@ -27,6 +27,10 @@ def validate_event_handler(handler: object) -> EventHandler:
     """
     Validate that an object is a supported asynchronous event handler.
 
+    Supported handlers:
+    - async functions
+    - objects with async __call__
+
     Args:
         handler:
             Object expected to be an async callable accepting a DomainEvent.
@@ -42,12 +46,10 @@ def validate_event_handler(handler: object) -> EventHandler:
     if not callable(handler):
         raise InvalidEventHandlerError("Event handler must be callable.")
 
-    if not inspect.iscoroutinefunction(handler):
-        raise InvalidEventHandlerError(
-            "Event handler must be an async callable."
-        )
+    if _is_async_callable(handler):
+        return handler  # type: ignore[return-value]
 
-    return handler  # type: ignore[return-value]
+    raise InvalidEventHandlerError("Event handler must be an async callable.")
 
 
 def get_handler_name(handler: EventHandler) -> str:
@@ -57,3 +59,15 @@ def get_handler_name(handler: EventHandler) -> str:
     This is used for logging, debugging, monitoring, and future diagnostics.
     """
     return getattr(handler, "__qualname__", getattr(handler, "__name__", repr(handler)))
+
+
+def _is_async_callable(handler: object) -> bool:
+    """
+    Return True if the handler is an async function or an object with async __call__.
+    """
+    if inspect.iscoroutinefunction(handler):
+        return True
+
+    call_method = getattr(handler, "__call__", None)
+
+    return inspect.iscoroutinefunction(call_method)

@@ -102,3 +102,13 @@ async def test_validated_async_handler_can_be_called() -> None:
     await validated_handler(event)
 
     assert called is True
+
+def test_validate_event_handler_accepts_async_callable_object() -> None:
+    """
+    Ensure async callable objects are accepted as event handlers.
+    """
+    handler = AsyncCallableHandler()
+
+    validated_handler = validate_event_handler(handler)
+
+    assert validated_handler is handler

@@ -11,17 +11,17 @@ Development Mode: Personal Professional-Grade System
 
 The current objective is to stabilize the platform foundation before adding trading logic, AI agents, market data, brokers, strategies, or autonomous execution.
 
-The Kernel and Configuration foundation must remain clean, testable, observable, reliable, and extensible before the system grows.
+The Kernel, Configuration foundation, and Event Bus foundation must remain clean, testable, observable, reliable, and extensible before the system grows.
 
 ---
 
 ## Current Development Focus
 
 ```text
-Configuration Manager Foundation
+Event Bus Foundation
 ```
 
-The project is currently focused on building and validating centralized configuration management.
+The project is currently focused on building and validating the internal asynchronous Event Bus.
 
 ---
 
@@ -54,6 +54,13 @@ The following foundation work has been completed:
 - Registered Configuration Manager in the smoke test
 - Added Configuration Manager automated tests
 - Added Kernel foundation integration test
+- Added Event Bus exception hierarchy
+- Added immutable DomainEvent base model
+- Added async Event Handler contract
+- Added in-memory asynchronous Event Bus
+- Registered Event Bus in the smoke test
+- Added Event Bus automated tests
+- Added Event Bus integration tests
 
 ---
 
@@ -68,6 +75,12 @@ ATOS/
     settings.py
 
   docs/
+
+  events/
+    base.py
+    bus.py
+    exceptions.py
+    handler.py
 
   kernel/
     __init__.py
@@ -92,10 +105,16 @@ ATOS/
       test_manager.py
       test_settings.py
 
+    events/
+      test_base.py
+      test_bus.py
+      test_handler.py
+
     fixtures/
       kernel_services.py
 
     integration/
+      test_event_bus_kernel_publish.py
       test_kernel_foundation_boot.py
 
     kernel/
@@ -154,6 +173,38 @@ The current Configuration foundation supports:
 
 ---
 
+## Current Event Bus Capabilities
+
+The current Event Bus foundation supports:
+
+- Immutable domain events
+- Event IDs
+- Event types
+- Event source tracking
+- Event payloads
+- Event metadata
+- Timezone-aware event timestamps
+- Event serialization through `to_dict`
+- Metadata extension through `with_metadata`
+- Async event handler contract
+- Async function handlers
+- Async callable object handlers
+- Handler validation
+- In-memory subscriber registry
+- Event type subscription
+- Event type unsubscription
+- Async event publishing
+- Handler failure isolation
+- Publish failure reporting
+- Event Bus health checks
+- Event Bus metrics:
+  - subscription count
+  - published event count
+  - handler error count
+  - registered event types
+
+---
+
 ## Current Test Coverage Scope
 
 The current automated tests validate:
@@ -190,7 +241,22 @@ The current automated tests validate:
 - Configuration Manager initialization
 - Configuration Manager startup
 - Configuration Manager health check
-- Kernel boot integration with Configuration Manager and DummyService
+- Kernel boot integration with Configuration Manager, EventBus, and DummyService
+- DomainEvent creation
+- DomainEvent validation
+- DomainEvent immutability
+- DomainEvent serialization
+- Event metadata extension
+- Event handler validation
+- Async callable event handlers
+- Event Bus subscription
+- Event Bus unsubscription
+- Event publishing
+- Event publishing before startup rejection
+- Invalid event rejection
+- Handler failure isolation
+- Event Bus health check output
+- Event Bus publish integration after Kernel boot
 
 ---
 
@@ -235,6 +301,7 @@ Expected smoke test services:
 
 ```text
 configuration_manager
+event_bus
 dummy_service
 ```
 
@@ -245,7 +312,6 @@ dummy_service
 The following components are not implemented yet:
 
 - Environment validation service
-- Event Bus
 - Dependency Manager
 - Health Manager
 - Plugin Manager
@@ -268,19 +334,17 @@ The following components are not implemented yet:
 The next immediate engineering step is:
 
 ```text
-Event Bus Foundation
+Dependency Manager Foundation
 ```
 
-The Event Bus must support:
+The Dependency Manager must support:
 
-- Internal domain events
-- Loose coupling between services
-- Async-first publishing
-- Subscriber registration
-- Safe handler execution
-- Failure isolation
-- Future event persistence
-- Future integration with message queues
+- Declaring service dependencies
+- Validating required dependencies before startup
+- Detecting missing dependencies
+- Preventing invalid startup order
+- Future dependency graph validation
+- Future circular dependency detection
 
 ---
 
@@ -309,7 +373,7 @@ The Kernel manages the platform.
 
 The Configuration Manager provides safe configuration access.
 
-The Event Bus will provide communication between components.
+The Event Bus provides asynchronous communication between components.
 
 The Kernel must not perform trading analysis, decision-making, portfolio management, or execution.
 

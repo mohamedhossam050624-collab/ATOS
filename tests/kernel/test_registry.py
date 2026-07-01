@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 import pytest
 
 from kernel.exceptions import (
@@ -10,32 +8,7 @@ from kernel.exceptions import (
     ServiceRegistrationError,
 )
 from kernel.registry import ServiceRegistry
-from kernel.service import Service
-
-
-class RegistryTestService(Service):
-    """
-    Concrete service implementation used only for testing the ServiceRegistry.
-    """
-
-    def __init__(self, name: str = "test_service") -> None:
-        super().__init__(
-            name=name,
-            description="Registry test service.",
-            version="1.0.0",
-        )
-
-    async def initialize(self) -> None:
-        pass
-
-    async def start(self) -> None:
-        pass
-
-    async def stop(self) -> None:
-        pass
-
-    async def health_check(self) -> dict[str, Any]:
-        return await super().health_check()
+from tests.fixtures.kernel_services import KernelTestService
 
 
 def test_registry_starts_empty() -> None:
@@ -54,7 +27,7 @@ def test_register_service() -> None:
     Ensure a valid service can be registered.
     """
     registry = ServiceRegistry()
-    service = RegistryTestService(name="market_data")
+    service = KernelTestService(name="market_data")
 
     registry.register(service)
 
@@ -78,8 +51,8 @@ def test_register_rejects_duplicate_service_name() -> None:
     Ensure duplicate service names are rejected.
     """
     registry = ServiceRegistry()
-    first_service = RegistryTestService(name="event_bus")
-    second_service = RegistryTestService(name="event_bus")
+    first_service = KernelTestService(name="event_bus")
+    second_service = KernelTestService(name="event_bus")
 
     registry.register(first_service)
 
@@ -92,7 +65,7 @@ def test_service_names_are_case_insensitive() -> None:
     Ensure service lookups are case-insensitive.
     """
     registry = ServiceRegistry()
-    service = RegistryTestService(name="HealthManager")
+    service = KernelTestService(name="HealthManager")
 
     registry.register(service)
 
@@ -126,7 +99,7 @@ def test_unregister_service() -> None:
     Ensure a registered service can be removed.
     """
     registry = ServiceRegistry()
-    service = RegistryTestService(name="scheduler")
+    service = KernelTestService(name="scheduler")
 
     registry.register(service)
     removed_service = registry.unregister("scheduler")
@@ -151,7 +124,7 @@ def test_list_services_returns_copy() -> None:
     Ensure list_services does not expose internal registry storage.
     """
     registry = ServiceRegistry()
-    service = RegistryTestService(name="config_manager")
+    service = KernelTestService(name="config_manager")
 
     registry.register(service)
 
@@ -167,8 +140,8 @@ def test_service_names_returns_registered_names() -> None:
     Ensure service_names returns the original registered service names.
     """
     registry = ServiceRegistry()
-    first_service = RegistryTestService(name="config_manager")
-    second_service = RegistryTestService(name="event_bus")
+    first_service = KernelTestService(name="config_manager")
+    second_service = KernelTestService(name="event_bus")
 
     registry.register(first_service)
     registry.register(second_service)
@@ -182,8 +155,8 @@ def test_clear_removes_all_services() -> None:
     """
     registry = ServiceRegistry()
 
-    registry.register(RegistryTestService(name="config_manager"))
-    registry.register(RegistryTestService(name="event_bus"))
+    registry.register(KernelTestService(name="config_manager"))
+    registry.register(KernelTestService(name="event_bus"))
 
     registry.clear()
 
@@ -198,9 +171,9 @@ def test_extend_registers_multiple_services() -> None:
     registry = ServiceRegistry()
 
     services = [
-        RegistryTestService(name="config_manager"),
-        RegistryTestService(name="event_bus"),
-        RegistryTestService(name="health_manager"),
+        KernelTestService(name="config_manager"),
+        KernelTestService(name="event_bus"),
+        KernelTestService(name="health_manager"),
     ]
 
     registry.extend(services)

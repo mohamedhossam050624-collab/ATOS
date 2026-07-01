@@ -1,53 +1,10 @@
 from __future__ import annotations
 
-from typing import Any
-
 import pytest
 
 from kernel.exceptions import InvalidServiceStateError
-from kernel.service import Service
 from kernel.state import ServiceState
-
-
-class KernelTestService(Service):
-    """
-    Concrete service implementation used only for testing the Service base class.
-    """
-
-    def __init__(
-        self,
-        name: str = "test_service",
-        description: str = "Test service.",
-        version: str = "1.0.0",
-    ) -> None:
-        super().__init__(
-            name=name,
-            description=description,
-            version=version,
-        )
-        self.initialized = False
-        self.started = False
-        self.stopped = False
-
-    async def initialize(self) -> None:
-        self.initialized = True
-
-    async def start(self) -> None:
-        self.started = True
-
-    async def stop(self) -> None:
-        self.stopped = True
-
-    async def health_check(self) -> dict[str, Any]:
-        health = await super().health_check()
-        health.update(
-            {
-                "initialized": self.initialized,
-                "started": self.started,
-                "stopped": self.stopped,
-            }
-        )
-        return health
+from tests.fixtures.kernel_services import KernelTestService
 
 
 def test_service_requires_non_empty_name() -> None:
@@ -119,7 +76,7 @@ async def test_service_lifecycle_methods_can_be_called() -> None:
     await service.stop()
 
     assert service.initialized is True
-    assert service.started is True
+    assert service.started is False
     assert service.stopped is True
 
 

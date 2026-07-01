@@ -1,2 +1,13 @@
 2026-06-30 22:44:48.776 | INFO     | __main__:main:8 - Starting ATOS v1.0.0
 2026-06-30 22:44:48.777 | INFO     | __main__:main:9 - Environment: development
+2026-07-01 05:19:51.888 | INFO     | kernel.kernel:register_service:62 - Registered service: dummy_service
+2026-07-01 05:19:51.889 | INFO     | kernel.kernel:start:116 - Starting ATOS Kernel.
+2026-07-01 05:19:51.889 | INFO     | kernel.lifecycle:initialize:32 - Initializing service: dummy_service
+2026-07-01 05:19:51.890 | INFO     | kernel.lifecycle:initialize:35 - Service initialized successfully: dummy_service
+2026-07-01 05:19:51.890 | INFO     | kernel.lifecycle:start:58 - Starting service: dummy_service
+2026-07-01 05:19:51.890 | INFO     | kernel.lifecycle:start:62 - Service started successfully: dummy_service
+2026-07-01 05:19:51.890 | INFO     | kernel.kernel:start:126 - ATOS Kernel started successfully.
+2026-07-01 05:19:51.891 | INFO     | kernel.kernel:shutdown:153 - Shutting down ATOS Kernel.
+2026-07-01 05:19:51.891 | INFO     | kernel.lifecycle:stop:87 - Stopping service: dummy_service
+2026-07-01 05:19:51.891 | INFO     | kernel.lifecycle:stop:91 - Service stopped successfully: dummy_service
+2026-07-01 05:19:51.891 | INFO     | kernel.kernel:shutdown:173 - ATOS Kernel shut down successfully.

@@ -11,23 +11,23 @@ Development Mode: Personal Professional-Grade System
 
 The current objective is to stabilize the platform foundation before adding trading logic, AI agents, market data, brokers, strategies, or autonomous execution.
 
-The Kernel must be clean, testable, observable, and reliable before the system grows.
+The Kernel must remain clean, testable, observable, reliable, and extensible before the system grows.
 
 ---
 
 ## Current Development Focus
 
 ```text
-Foundation Repair Pass
+Kernel Foundation Validation
 ```
 
-This pass focuses on cleaning and stabilizing the early project structure.
+The project is currently focused on validating the Kernel foundation through automated tests and clean documentation.
 
 ---
 
 ## Completed Foundation Work
 
-The following foundation repairs have been completed:
+The following foundation work has been completed:
 
 - Renamed Kernel package from `kernal` to `kernel`
 - Renamed `kernal.py` to `kernel.py`
@@ -41,8 +41,12 @@ The following foundation repairs have been completed:
 - Added clean smoke-test entrypoint in `main.py`
 - Updated `.gitignore`
 - Added runtime dependency requirements
+- Added development test requirements
 - Configured shared project logger
 - Cleaned project README
+- Added pytest configuration
+- Added shared test fixtures
+- Added Kernel foundation automated tests
 
 ---
 
@@ -67,11 +71,25 @@ ATOS/
   shared/
     logger.py
 
+  tests/
+    conftest.py
+    fixtures/
+      kernel_services.py
+    kernel/
+      test_exceptions.py
+      test_kernel.py
+      test_lifecycle.py
+      test_registry.py
+      test_service.py
+      test_service_state.py
+
   .gitignore
   CHANGELOG.md
   PROJECT_STATUS.md
   README.md
   main.py
+  pytest.ini
+  requirements-dev.txt
   requirements.txt
 ```
 
@@ -82,6 +100,7 @@ ATOS/
 The current Kernel supports:
 
 - Service registration
+- Service unregistration before startup
 - Service lookup
 - Service listing
 - Service lifecycle startup
@@ -95,36 +114,71 @@ The current Kernel supports:
 
 ---
 
-## Current Runtime Dependency
+## Current Test Coverage Scope
+
+The current automated tests validate:
+
+- Service lifecycle state values
+- Active and terminal service states
+- Service metadata
+- Service state mutation
+- Invalid service state handling
+- Service health check output
+- Service registry registration
+- Duplicate service protection
+- Missing service lookup errors
+- Service unregistration
+- Registry clearing and extension
+- Lifecycle initialization
+- Lifecycle startup
+- Lifecycle shutdown
+- Lifecycle failure handling
+- Kernel service registration
+- Kernel startup
+- Kernel shutdown
+- Kernel rollback on startup failure
+- Kernel shutdown failure reporting
+- Kernel health check output
+- Kernel exception hierarchy
+
+---
+
+## Current Runtime Dependencies
 
 ```text
 loguru==0.7.3
 ```
 
-No additional dependencies should be added until the implementation actually requires them.
+---
+
+## Current Development Dependencies
+
+```text
+pytest
+pytest-asyncio
+```
 
 ---
 
-## Verified Smoke Test
+## Verified Commands
 
-The current smoke test command is:
+Run all tests:
+
+```powershell
+python -m pytest
+```
+
+Run Kernel smoke test:
 
 ```powershell
 python main.py
 ```
 
-Expected output:
+Expected smoke test output:
 
 ```text
 ATOS Kernel smoke test completed successfully.
 ```
-
-This confirms that the Kernel can:
-
-- Register a service
-- Start the service
-- Run a health check
-- Shut down gracefully
 
 ---
 
@@ -132,7 +186,6 @@ This confirms that the Kernel can:
 
 The following components are not implemented yet:
 
-- Automated tests
 - Configuration Manager
 - Environment validation
 - Event Bus
@@ -153,23 +206,24 @@ The following components are not implemented yet:
 
 ---
 
-## Next Immediate Step
+## Next Immediate Engineering Step
 
 The next immediate engineering step is:
 
 ```text
-Add automated tests for the current Kernel foundation
+Configuration Manager Foundation
 ```
 
-Testing must verify:
+The Configuration Manager must support:
 
-- Service state transitions
-- Service registration
-- Duplicate service protection
-- Kernel startup
-- Kernel shutdown
-- Health check output
-- Failure handling
+- Centralized configuration loading
+- Environment variable reading
+- Safe defaults
+- Validation
+- No hardcoded secrets
+- Future environment-specific configuration
+- Future feature flags
+- Future trading parameter configuration
 
 ---
 
@@ -204,8 +258,8 @@ The Kernel must not perform trading analysis, decision-making, portfolio managem
 
 ```text
 Stability first.
-Tests second.
+Tests always.
 Features later.
 ```
 
-The project must remain clean and maintainable before expanding into advanced AI and trading systems.
+The project must remain clean, maintainable, and testable before expanding into advanced AI and trading systems.

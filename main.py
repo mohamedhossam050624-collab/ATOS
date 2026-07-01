@@ -4,6 +4,7 @@ import asyncio
 import sys
 from typing import Any
 
+from config.manager import ConfigurationManager
 from kernel import Kernel
 from kernel.exceptions import KernelError
 from services.dummy_service import DummyService
@@ -12,19 +13,25 @@ from shared.logger import logger
 
 async def run_kernel_smoke_test() -> dict[str, Any]:
     """
-    Run a minimal Kernel smoke test.
+    Run a minimal ATOS Kernel smoke test.
 
     This entrypoint validates that the Kernel can:
-    - Register a service.
+    - Register multiple services.
     - Start all registered services.
+    - Load configuration through the Configuration Manager.
     - Run health checks.
     - Shut down gracefully.
 
     This file is temporary for the foundation phase and must not contain
-    trading logic, AI logic, broker logic, or business workflows.
+    trading logic, AI logic, broker logic, strategy logic, or business workflows.
     """
     kernel = Kernel()
-    kernel.register_service(DummyService())
+
+    configuration_manager = ConfigurationManager(environ={})
+    dummy_service = DummyService()
+
+    kernel.register_service(configuration_manager)
+    kernel.register_service(dummy_service)
 
     try:
         await kernel.start()

@@ -5,6 +5,7 @@ import sys
 from typing import Any
 
 from config.manager import ConfigurationManager
+from events.bus import EventBus
 from kernel import Kernel
 from kernel.exceptions import KernelError
 from services.dummy_service import DummyService
@@ -16,9 +17,10 @@ async def run_kernel_smoke_test() -> dict[str, Any]:
     Run a minimal ATOS Kernel smoke test.
 
     This entrypoint validates that the Kernel can:
-    - Register multiple services.
+    - Register multiple foundation services.
     - Start all registered services.
     - Load configuration through the Configuration Manager.
+    - Start the in-memory Event Bus.
     - Run health checks.
     - Shut down gracefully.
 
@@ -28,9 +30,11 @@ async def run_kernel_smoke_test() -> dict[str, Any]:
     kernel = Kernel()
 
     configuration_manager = ConfigurationManager(environ={})
+    event_bus = EventBus()
     dummy_service = DummyService()
 
     kernel.register_service(configuration_manager)
+    kernel.register_service(event_bus)
     kernel.register_service(dummy_service)
 
     try:
